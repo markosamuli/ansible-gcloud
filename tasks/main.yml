@@ -1,5 +1,14 @@
 ---
 
+- name: Load variables for the target system
+  include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+      - "{{ ansible_distribution }}.yml"
+      - "{{ ansible_os_family }}.yml"
+      - "default.yml"
+      paths: vars
+
 - include: debian.yml
   when: ansible_os_family == 'Debian'
 
