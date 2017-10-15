@@ -8,14 +8,17 @@ gcloud_force_download: yes             # When downloading the archive, always do
 gcloud_archive_path: ''                        # Path to the gcloud archive file on the Ansible controller.
                                                # If present archive will be copied, not downloaded.
 
-gcloud_install_path: "{{ ansible_env.HOME }}"  # Path on target node where the unarchived files should land.
+gcloud_home: "{{ ansible_env.HOME }}"
+gcloud_install_path: "{{ gcloud_home }}/opt"  # Path on target node where the unarchived files should land.
 
 gcloud_usage_reporting: no        # Enable usage reporting?
 gcloud_profile_path: ''           # Path to the user profile login script. Optional.
-gcloud_command_completion: yes    # Enable bash style command completion in the login script?
-gcloud_update_path: yes           # Update the PATH when when modifying user's login script.
+gcloud_command_completion: no    # Enable bash style command completion in the login script?
+gcloud_update_path: no           # Update the PATH when when modifying user's login script.
 gcloud_override_components: []    # Override the components that would be installed by default, and install these instead.
 
 gcloud_additional_components: []  # Additional components to install by default. Will either be added to the default install
                                   # list, or to the override-components (if provided)
 gcloud_debug: yes
+
+gcloud_setup_shell: yes

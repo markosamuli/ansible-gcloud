@@ -1,19 +1,29 @@
 ---
 
-# - name: Create .config/gcloud directory
-#   file:
-#     path: "{{ ansible_env.HOME }}/.config/gcloud"
-#     state: directory
-#   become: False
+- name: Update ca-certificates
+  become: yes
+  apt:
+    name: ca-certificates
+    state: latest
+
+- name: Install apt-transport-https
+  become: yes
+  apt:
+    name: apt-transport-https
 
 - name: Add the Cloud SDK distribution URI as a package source
+  become: yes
   apt_repository:
     repo: 'deb https://packages.cloud.google.com/apt {{ cloud_sdk_repo }} main'
 
 - name: Import the Google Cloud Platform public key
+  become: yes
   apt_key:
     url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
 
 - name: Install the Cloud SDK
+  become: yes
   apt:
     name: google-cloud-sdk
+    update_cache: yes
+
