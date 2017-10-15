@@ -14,3 +14,6 @@
 
 - include: install.yml
   when: ansible_os_family == 'Darwin'
+
+- include: shell.yml
+  when: gcloud_setup_shell
