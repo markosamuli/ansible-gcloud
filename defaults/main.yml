@@ -8,7 +8,8 @@ gcloud_force_download: yes             # When downloading the archive, always do
 gcloud_archive_path: ''                        # Path to the gcloud archive file on the Ansible controller.
                                                # If present archive will be copied, not downloaded.
 
-gcloud_install_path: "{{ ansible_env.HOME }}"  # Path on target node where the unarchived files should land.
+gcloud_home: "{{ ansible_env.HOME }}"
+gcloud_install_path: "{{ gcloud_home }}/opt"  # Path on target node where the unarchived files should land.
 
 gcloud_usage_reporting: no        # Enable usage reporting?
 gcloud_profile_path: ''           # Path to the user profile login script. Optional.

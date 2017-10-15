@@ -1,8 +1,13 @@
 ---
 
-- name: Insure temp path exists
+- name: Ensure temp path exists
   file:
     path: "{{ gcloud_tmp_path }}"
+    state: directory
+
+- name: Ensure install path exists
+  file:
+    path: "{{ gcloud_install_path }}"
     state: directory
 
 #
