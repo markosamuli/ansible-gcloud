@@ -12,7 +12,7 @@
 - include: debian.yml
   when: ansible_os_family == 'Debian'
 
-- include: install.yml
+- include: darwin.yml
   when: ansible_os_family == 'Darwin'
 
 - include: shell.yml
