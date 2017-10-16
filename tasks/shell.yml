@@ -1,27 +1,37 @@
 ---
 
-- name: Check whether {{ gcloud_home }}/.bashrc exists
+- name: Set path to .bashrc
+  set_fact:
+    gcloud_bashrc_path: "{{ gcloud_home }}/.bashrc"
+  when: gcloud_bashrc_path is undefined
+
+- name: Check whether .bashrc file exists
   stat:
-    path: "{{ gcloud_home }}/.bashrc"
+    path: "{{ gcloud_bashrc_path }}"
   register: gcloud_bashrc_st
 
-- name: Check whether CLOUDSDK_ROOT_DIR is defined in {{ gcloud_home }}/.bashrc
-  command: grep -Fq "export CLOUDSDK_ROOT_DIR=" {{ gcloud_home }}/.bashrc
+- name: Resolve .bashrc symlink
+  set_fact:
+    gcloud_bashrc_path: "{{ gcloud_bashrc_st.stat.lnk_source }}"
+  when: gcloud_bashrc_st.stat.exists and gcloud_bashrc_st.stat.islnk
+
+- name: Check whether CLOUDSDK_ROOT_DIR is defined in .bashrc
+  command: grep -Fq "export CLOUDSDK_ROOT_DIR=" {{ gcloud_bashrc_path }}
   register: check_bashrc
   ignore_errors: True
   changed_when: False
   failed_when: False
   when: gcloud_bashrc_st.stat.exists
 
-- name: Load Google Cloud SDK in {{ gcloud_home }}/.bashrc
+- name: Load Google Cloud SDK in .bashrc
   blockinfile:
-    dest: "{{ gcloud_home }}/.bashrc"
+    dest: "{{ gcloud_bashrc_path }}"
     block: |
       # Created by markosamuli.gcloud Ansible role
       # Load Google Cloud SDK from $HOME/opt, then $HOME and finally /opt
       if [ -d "$HOME/opt/google-cloud-sdk" ]; then
         export CLOUDSDK_ROOT_DIR="$HOME/opt/google-cloud-sdk"
-      elif [ -d "$HOME/google-cloud-sdk" ]; then  
+      elif [ -d "$HOME/google-cloud-sdk" ]; then
         export CLOUDSDK_ROOT_DIR="$HOME/google-cloud-sdk"
       elif [ -d "/opt/google-cloud-sdk" ]; then
         export CLOUDSDK_ROOT_DIR="/opt/google-cloud-sdk"
@@ -35,28 +45,38 @@
       fi
   when: gcloud_bashrc_st.stat.exists and check_bashrc.rc != 0
 
-- name: Check whether {{ gcloud_home }}/.zshrc exists
+- name: Set path to .zshrc
+  set_fact:
+    gcloud_zshrc_path: "{{ gcloud_home }}/.zshrc"
+  when: gcloud_zshrc_path is undefined
+
+- name: Check whether .zshrc exists
   stat:
-    path: "{{ gcloud_home }}/.zshrc"
+    path: "{{ gcloud_zshrc_path }}"
   register: gcloud_zshrc_st
 
-- name: Check whether CLOUDSDK_ROOT_DIR is defined in {{ gcloud_home }}/.zshrc
-  command: grep -Fq "export CLOUDSDK_ROOT_DIR=" {{ gcloud_home }}/.zshrc
+- name: Resolve .zshrc symlink
+  set_fact:
+    gcloud_zshrc_path: "{{ gcloud_zshrc_st.stat.lnk_source }}"
+  when: gcloud_zshrc_st.stat.exists and gcloud_zshrc_st.stat.islnk
+
+- name: Check whether CLOUDSDK_ROOT_DIR is defined in .zshrc
+  command: grep -Fq "export CLOUDSDK_ROOT_DIR=" {{ gcloud_zshrc_path }}
   register: check_zshrc
   ignore_errors: True
   changed_when: False
   failed_when: False
   when: gcloud_zshrc_st.stat.exists
 
-- name: Load Google Cloud SDK in {{ gcloud_home }}/.zshrc
+- name: Load Google Cloud SDK in .zshrc
   blockinfile:
-    dest: "{{ gcloud_home }}/.zshrc"
+    dest: "{{ gcloud_zshrc_path }}"
     block: |
       # Created by markosamuli.gcloud Ansible role
       # Load Google Cloud SDK from $HOME/opt, then $HOME and finally /opt
       if [ -d "$HOME/opt/google-cloud-sdk" ]; then
         export CLOUDSDK_ROOT_DIR="$HOME/opt/google-cloud-sdk"
-      elif [ -d "$HOME/google-cloud-sdk" ]; then  
+      elif [ -d "$HOME/google-cloud-sdk" ]; then
         export CLOUDSDK_ROOT_DIR="$HOME/google-cloud-sdk"
       elif [ -d "/opt/google-cloud-sdk" ]; then
         export CLOUDSDK_ROOT_DIR="/opt/google-cloud-sdk"
