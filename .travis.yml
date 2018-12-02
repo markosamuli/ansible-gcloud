@@ -61,8 +61,9 @@ before_script:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then rvm get head || true; fi
 
 script:
+
   # Run pre-commit hooks
-  - pre-commit run -a
+  - pre-commit run -a || travis_terminate 1
 
   # Basic role syntax check
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
