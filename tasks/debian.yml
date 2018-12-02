@@ -4,7 +4,6 @@
   become: yes
   apt:
     name: ca-certificates
-    state: latest
 
 - name: Install apt-transport-https
   become: yes

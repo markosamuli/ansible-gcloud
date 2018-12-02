@@ -42,6 +42,8 @@
         source $CLOUDSDK_ROOT_DIR/path.bash.inc
         # The next line enables bash completion for gcloud.
         source $CLOUDSDK_ROOT_DIR/completion.bash.inc
+      elif [ -d "/usr/share/google-cloud-sdk" ]; then
+        source /usr/share/google-cloud-sdk/completion.bash.inc
       fi
   when: gcloud_bashrc_st.stat.exists and check_bashrc.rc != 0
 
@@ -87,5 +89,7 @@
         source $CLOUDSDK_ROOT_DIR/path.zsh.inc
         # The next line enables zsh completion for gcloud.
         source $CLOUDSDK_ROOT_DIR/completion.zsh.inc
+      elif [ -d "/usr/share/google-cloud-sdk" ]; then
+        source /usr/share/google-cloud-sdk/completion.zsh.inc
       fi
   when: gcloud_zshrc_st.stat.exists and check_zshrc.rc != 0
