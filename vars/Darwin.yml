@@ -1,4 +1,4 @@
 ---
 
-gcloud_version: '175.0.0'
-gcloud_archive_name: 'google-cloud-sdk-{{ gcloud_version }}-darwin-x86_64.tar.gz'
+gcloud_version: "226.0.0"
+gcloud_archive_name: "google-cloud-sdk-{{ gcloud_version }}-darwin-{{ ansible_architecture }}.tar.gz"
