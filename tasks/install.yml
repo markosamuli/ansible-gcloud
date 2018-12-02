@@ -60,6 +60,7 @@
 
 - name: Install Google Cloud SDK
   command: "{{ gcloud_tmp_path }}/run_install.sh"
+  changed_when: True
 
 - name: Remove the archive
   file:
