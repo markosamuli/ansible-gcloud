@@ -35,7 +35,7 @@
       state: absent
   when: gcloud_archive_name != ''
 
-- name: Set installation package path 
+- name: Set installation package path
   set_fact:
     archive_path: "{{ gcloud_tmp_path + '/' +  gcloud_archive_name }}"
   when: gcloud_archive_name != ''
