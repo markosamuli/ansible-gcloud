@@ -15,5 +15,5 @@
     msg: "Google Cloud SDK v{{ gcloud_installed_version }} already installed, skip install."
   when: gcloud_installed_version is defined and gcloud_installed_version == gcloud_version
 
-- include: install.yml
+- include_tasks: install.yml
   when: gcloud_installed_version is undefined or (gcloud_installed_version != gcloud_version)

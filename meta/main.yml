@@ -2,12 +2,13 @@ galaxy_info:
   author: Marko Samuli Kirves
   description: Install Google Cloud SDK
   license: MIT
-  min_ansible_version: 2.2
+  min_ansible_version: 2.4
   platforms:
   - name: MacOSX
     versions:
-    - 10.11
     - 10.12
+    - 10.13
+    - 10.14
   - name: Ubuntu
     versions:
     - trusty

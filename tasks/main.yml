@@ -9,11 +9,11 @@
       - "default.yml"
       paths: vars
 
-- include: debian.yml
+- include_tasks: debian.yml
   when: ansible_os_family == 'Debian'
 
-- include: darwin.yml
+- include_tasks: darwin.yml
   when: ansible_os_family == 'Darwin'
 
-- include: shell.yml
+- include_tasks: shell.yml
   when: gcloud_setup_shell
