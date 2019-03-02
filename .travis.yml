@@ -73,10 +73,10 @@ install:
   - if [[ "$BREW_UPGRADE" == "yes" ]]; then brew upgrade pre-commit; fi
 
   # Install Ansible with pip
-  - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then pip install ansible${ANSIBLE_VERSION}; fi
+  - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then pip install --user ansible${ANSIBLE_VERSION}; fi
 
   # Install pre-commit with pip
-  - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then pip install pre-commit; fi
+  - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then pip install --user pre-commit; fi
 
   # Check Ansible version
   - ansible --version
