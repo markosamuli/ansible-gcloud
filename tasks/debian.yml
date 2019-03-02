@@ -10,15 +10,15 @@
   apt:
     name: apt-transport-https
 
-- name: Add the Cloud SDK distribution URI as a package source
-  become: yes
-  apt_repository:
-    repo: 'deb https://packages.cloud.google.com/apt {{ cloud_sdk_repo }} main'
-
 - name: Import the Google Cloud Platform public key
   become: yes
   apt_key:
     url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+
+- name: Add the Cloud SDK distribution URI as a package source
+  become: yes
+  apt_repository:
+    repo: 'deb https://packages.cloud.google.com/apt {{ cloud_sdk_repo }} main'
 
 - name: Install the Cloud SDK
   become: yes
