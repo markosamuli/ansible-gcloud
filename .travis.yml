@@ -9,7 +9,7 @@ matrix:
       os: linux
       dist: trusty
       sudo: required
-      env: ANSIBLE_VERSION='<2.5.0'
+      env: ANSIBLE_VERSION='>=2.4.6.0,<2.5.0'
     - name: "Ubuntu 16.04 LTS with Ansible 2.5"
       os: linux
       dist: xenial
