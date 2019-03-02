@@ -25,6 +25,15 @@ matrix:
       dist: xenial
       sudo: required
       env: ANSIBLE_VERSION='<2.8.0'
+    - name: "macOS 10.12 (Sierra) with Xcode 9.2"
+      os: osx
+      osx_image: xcode9.2
+    - name: "macOS 10.13 (High Sierra) with Xcode 10.1"
+      os: osx
+      osx_image: xcode10.1
+    - name: "macOS 10.14 (Mojave) with Xcode 10.2 beta"
+      os: osx
+      osx_image: xcode10.2
 
 # Install Ansible and Python development packages
 addons:
