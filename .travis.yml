@@ -28,6 +28,7 @@ matrix:
     - name: "macOS 10.12 (Sierra) with Xcode 9.2"
       os: osx
       osx_image: xcode9.2
+      env: BREW_UPGRADE=yes
     - name: "macOS 10.13 (High Sierra) with Xcode 10.1"
       os: osx
       osx_image: xcode10.1
@@ -41,6 +42,10 @@ addons:
     packages:
     - python-pip
     - python-dev
+  homebrew:
+    packages:
+    - ansible
+    - pre-commit
 
 cache:
   directories:
@@ -51,17 +56,17 @@ before_cache:
 
 before_install:
   # Update Homebrew before installation
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
+  - if [[ "$BREW_UPGRADE" == "yes" ]]; then brew update; fi
 
 install:
   # Install Ansible with Homebrew on OSX
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install ansible; fi
+  - if [[ "$BREW_UPGRADE" == "yes" ]]; then brew upgrade ansible; fi
 
-  # Install pre-commit with Homebrew
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install pre-commit; fi
+  # upgrade pre-commit with Homebrew
+  - if [[ "$BREW_UPGRADE" == "yes" ]]; then brew upgrade pre-commit; fi
 
   # Install Ansible with pip
-  - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then sudo pip install ansible==${ANSIBLE_VERSION}; fi
+  - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then sudo pip install ansible${ANSIBLE_VERSION}; fi
 
   # Install pre-commit with pip
   - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then sudo pip install pre-commit; fi
