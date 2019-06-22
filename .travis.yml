@@ -37,6 +37,7 @@ addons:
     packages:
     - ansible
     - pre-commit
+    update: true
 
 cache:
   directories:
