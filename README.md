@@ -1,15 +1,21 @@
 # Install Google Cloud SDK
 
-[![Build Status](https://travis-ci.org/markosamuli/ansible-gcloud.svg?branch=master)](https://travis-ci.org/markosamuli/ansible-gcloud)
 [![GitHub release](https://img.shields.io/github/release/markosamuli/ansible-gcloud.svg)](https://github.com/markosamuli/ansible-gcloud/releases)
 [![License](https://img.shields.io/github/license/markosamuli/ansible-gcloud.svg)](https://github.com/markosamuli/ansible-gcloud/blob/master/LICENSE)
+
+| Branch  | Status |
+|---------|--------|
+| master  | [![Build Status](https://travis-ci.org/markosamuli/ansible-gcloud.svg?branch=master)](https://travis-ci.org/markosamuli/ansible-gcloud)
+| develop | [![Build Status](https://travis-ci.org/markosamuli/ansible-gcloud.svg?branch=develop)](https://travis-ci.org/markosamuli/ansible-gcloud)
 
 This Ansible role to install Google Cloud SDK on Ubuntu and macOS development
 machines.
 
+Do not use this on production servers.
+
 ## Update release
 
-Run following script to update Cloud SDK versio in Ansible variables:
+Run following script to update Cloud SDK version in Ansible variables:
 
 ```bash
 ./update-release
