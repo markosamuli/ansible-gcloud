@@ -7,14 +7,22 @@
 
 - name: Get installed Google Cloud SDK version
   set_fact:
-    gcloud_installed_version: "{{ lookup('file', gcloud_install_path + '/google-cloud-sdk/VERSION') }}"
+    gcloud_installed_version: "{{
+      lookup('file', gcloud_install_path
+                     + '/google-cloud-sdk/VERSION') }}"
   when: gcloud_st.stat.exists
 
 - name: Display installed version
   debug:
-    msg: "Google Cloud SDK v{{ gcloud_installed_version }} already installed, skip install."
-  when: gcloud_installed_version is defined and gcloud_installed_version == gcloud_version
+    msg: >
+      Google Cloud SDK v{{ gcloud_installed_version }}
+      already installed, skip install.
+  when: >
+    gcloud_installed_version is defined
+    and gcloud_installed_version == gcloud_version
 
 - name: Install Cloud SDK
   include_tasks: install_archive.yml
-  when: gcloud_installed_version is undefined or (gcloud_installed_version != gcloud_version)
+  when: >
+    gcloud_installed_version is undefined
+    or (gcloud_installed_version != gcloud_version)

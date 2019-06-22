@@ -1,4 +1,5 @@
 ---
 
 # Cloud SDK archive name
-gcloud_archive_name: "google-cloud-sdk-{{ gcloud_version }}-darwin-{{ ansible_architecture }}.tar.gz"
+gcloud_archive_name: >-
+  google-cloud-sdk-{{ gcloud_version }}-darwin-{{ ansible_architecture }}.tar.gz

@@ -17,12 +17,11 @@
 
   - name: Add the Cloud SDK distribution URI as a package source
     apt_repository:
-      repo: 'deb https://packages.cloud.google.com/apt {{ cloud_sdk_repo }} main'
+      repo: 'deb {{ cloud_sdk_apt_url }} {{ cloud_sdk_repo }} main'
 
   - name: Install the Cloud SDK
     apt:
       name: google-cloud-sdk
-      update_cache: yes
+      update_cache: true
 
-  become: yes
-
+  become: true

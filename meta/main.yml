@@ -1,3 +1,5 @@
+---
+
 galaxy_info:
   role_name: gcloud
   author: Marko Samuli Kirves
@@ -6,14 +8,14 @@ galaxy_info:
   min_ansible_version: 2.6
   github_branch: master
   platforms:
-  - name: MacOSX
-    versions:
-    - 10.13
-    - 10.14
-  - name: Ubuntu
-    versions:
-    - trusty
-    - xenial
+    - name: MacOSX
+      versions:
+        - 10.13
+        - 10.14
+    - name: Ubuntu
+      versions:
+        - trusty
+        - xenial
   galaxy_tags:
     - gcloud
 dependencies: []

@@ -10,7 +10,7 @@
 
   - name: Remove Cloud SDK APT repository
     apt_repository:
-      repo: 'deb https://packages.cloud.google.com/apt {{ cloud_sdk_repo }} main'
+      repo: 'deb {{ cloud_sdk_apt_url }} {{ cloud_sdk_repo }} main'
       state: absent
 
-  become: yes
+  become: true

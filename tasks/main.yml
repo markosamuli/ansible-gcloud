@@ -4,9 +4,9 @@
   include_vars: "{{ item }}"
   with_first_found:
     - files:
-      - "os/{{ ansible_distribution }}.yml"
-      - "os/{{ ansible_os_family }}.yml"
-      - "default.yml"
+        - "os/{{ ansible_distribution }}.yml"
+        - "os/{{ ansible_os_family }}.yml"
+        - "default.yml"
       paths: vars
 
 - name: Install Cloud SDK on Debian-based systems

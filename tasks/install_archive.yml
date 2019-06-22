@@ -31,8 +31,8 @@
 
 - name: Remove existing google-cloud-sdk dir, it if exists
   file:
-      path: "{{ gcloud_install_path }}/google-cloud-sdk"
-      state: absent
+    path: "{{ gcloud_install_path }}/google-cloud-sdk"
+    state: absent
   when: gcloud_archive_name != ''
 
 - name: Set installation package path
@@ -60,7 +60,7 @@
 
 - name: Install Google Cloud SDK
   command: "{{ gcloud_tmp_path }}/run_install.sh"
-  changed_when: True
+  changed_when: true
 
 - name: Remove the archive
   file:
