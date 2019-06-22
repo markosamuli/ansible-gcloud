@@ -8,8 +8,6 @@ RUN apt-get update && apt-get install -y \
     python-pip \
  && rm -rf /var/lib/apt/lists/*
 
-RUN pip install -U pip
-
 ARG ansible_version="%%ANSIBLE_VERSION%%"
 ENV ANSIBLE_VERSION="${ansible_version}"
 RUN pip install ansible${ANSIBLE_VERSION}
