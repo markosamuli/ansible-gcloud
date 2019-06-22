@@ -7,3 +7,7 @@
 - name: Install Cloud SDK from an archive
   include_tasks: install_from_archive.yml
   when: not gcloud_install_from_package_manager|bool
+
+- name: Uninstall Cloud SDK installed with APT
+  include_tasks: uninstall_apt.yml
+  when: not gcloud_install_from_package_manager|bool

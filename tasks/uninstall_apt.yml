@@ -1,0 +1,16 @@
+---
+
+- name: Uninstall Cloud SDK installed with APT
+  block:
+
+  - name: Uninstall the Cloud SDK
+    apt:
+      name: google-cloud-sdk
+      state: absent
+
+  - name: Remove Cloud SDK APT repository
+    apt_repository:
+      repo: 'deb https://packages.cloud.google.com/apt {{ cloud_sdk_repo }} main'
+      state: absent
+
+  become: yes
