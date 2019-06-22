@@ -5,26 +5,21 @@ python: "2.7"
 
 matrix:
   include:
-    - name: "Ubuntu 14.04 LTS with Ansible 2.4"
-      os: linux
-      dist: trusty
-      sudo: required
-      env: ANSIBLE_VERSION='>=2.4.6.0,<2.5.0'
-    - name: "Ubuntu 16.04 LTS with Ansible 2.5"
-      os: linux
-      dist: xenial
-      sudo: required
-      env: ANSIBLE_VERSION='<2.6.0'
-    - name: "Ubuntu 16.04 LTS with Ansible 2.6"
+    - name: "Ubuntu 16.04 (Xenial) with Ansible 2.6"
       os: linux
       dist: xenial
       sudo: required
       env: ANSIBLE_VERSION='<2.7.0'
-    - name: "Ubuntu 16.04 LTS with Ansible 2.7"
+    - name: "Ubuntu 16.04 (Xenial) with Ansible 2.7"
       os: linux
       dist: xenial
       sudo: required
       env: ANSIBLE_VERSION='<2.8.0'
+    - name: "Ubuntu 16.04 (Xenial) with Ansible 2.8"
+      os: linux
+      dist: xenial
+      sudo: required
+      env: ANSIBLE_VERSION='<2.9.0'
     - name: "macOS 10.12 (Sierra) with Xcode 9.2"
       os: osx
       osx_image: xcode9.2
@@ -54,6 +49,7 @@ cache:
 branches:
   only:
   - master
+  - develop
   - /^feature\/.*$/
   - /^bugfix\/.*$/
   - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
