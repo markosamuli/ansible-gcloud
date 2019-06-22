@@ -4,8 +4,8 @@
 [![GitHub release](https://img.shields.io/github/release/markosamuli/ansible-gcloud.svg)](https://github.com/markosamuli/ansible-gcloud/releases)
 [![License](https://img.shields.io/github/license/markosamuli/ansible-gcloud.svg)](https://github.com/markosamuli/ansible-gcloud/blob/master/LICENSE)
 
-
-This Ansible role to install Google Cloud SDK on Ubuntu and macOS development machines.
+This Ansible role to install Google Cloud SDK on Ubuntu and macOS development
+machines.
 
 ## Update release
 
