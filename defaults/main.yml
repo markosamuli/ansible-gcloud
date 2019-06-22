@@ -3,18 +3,18 @@
 # Example: google-cloud-sdk-114.0.0-darwin-x86_64.tar.gz.
 # If present, the archive will be downloaded.
 # See https://cloud.google.com/sdk/ to find the archive name you need.
-gcloud_archive_name: ''
+gcloud_archive_name: false
 
 # Path where the downloaded archive can be temporarily placed
 gcloud_tmp_path: /tmp/install_gcloud
 
 # When downloading the archive, always download the archive, even if it already
 # exists in the temp path.
-gcloud_force_download: yes
+gcloud_force_download: true
 
 # Path to the gcloud archive file on the Ansible controller.
 # If present archive will be copied, not downloaded.
-gcloud_archive_path: ''
+gcloud_archive_path: false
 
 # User home directory.
 gcloud_home: "{{ ansible_env.HOME }}"
@@ -23,16 +23,16 @@ gcloud_home: "{{ ansible_env.HOME }}"
 gcloud_install_path: "{{ gcloud_home }}/opt"
 
  # Enable usage reporting?
-gcloud_usage_reporting: no
+gcloud_usage_reporting: false
 
 # Path to the user profile login script. Optional.
-gcloud_profile_path: ''
+gcloud_profile_path: false
 
 # Enable bash style command completion in the login script?
-gcloud_command_completion: no
+gcloud_command_completion: false
 
 # Update the PATH when when modifying user's login script.
-gcloud_update_path: no
+gcloud_update_path: false
 
 # Override the components that would be installed by default, and install
 # these instead.
@@ -50,7 +50,7 @@ gcloud_debug: yes
 gcloud_version: "251.0.0"
 
 # Setup shell init scripts
-gcloud_setup_shell: yes
+gcloud_setup_shell: true
 
 # Install Cloud SDK from the package manager where available
-gcloud_install_from_package_manager: yes
+gcloud_install_from_package_manager: true
