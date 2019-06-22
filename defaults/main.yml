@@ -22,7 +22,7 @@ gcloud_additional_components: []  # Additional components to install by default.
 gcloud_debug: yes
 
 # Cloud SDK version to install
-gcloud_version: "236.0.0"
+gcloud_version: "251.0.0"
 
 # Setup shell init scripts
 gcloud_setup_shell: yes
