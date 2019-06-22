@@ -3,18 +3,10 @@
 # Example: google-cloud-sdk-114.0.0-darwin-x86_64.tar.gz.
 # If present, the archive will be downloaded.
 # See https://cloud.google.com/sdk/ to find the archive name you need.
-gcloud_archive_name: false
+gcloud_archive_name: ''
 
 # Path where the downloaded archive can be temporarily placed
 gcloud_tmp_path: /tmp/install_gcloud
-
-# When downloading the archive, always download the archive, even if it already
-# exists in the temp path.
-gcloud_force_download: true
-
-# Path to the gcloud archive file on the Ansible controller.
-# If present archive will be copied, not downloaded.
-gcloud_archive_path: false
 
 # User home directory.
 gcloud_home: "{{ ansible_env.HOME }}"

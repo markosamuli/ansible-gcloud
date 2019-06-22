@@ -10,44 +10,25 @@
     path: "{{ gcloud_install_path }}"
     state: directory
 
-#
-# download
-#
+- name: Set installation package path
+  set_fact:
+    gcloud_archive_path: "{{ gcloud_tmp_path }}/{{ gcloud_archive_name }}"
+
 - name: Download the archive
   get_url:
     url: "{{ gcloud_archive_url }}/{{ gcloud_archive_name }}"
-    dest: "{{ gcloud_tmp_path }}/{{ gcloud_archive_name }}"
-    force: "{{ gcloud_force_download }}"
-  when: gcloud_archive_name
-
-#
-# copy from Ansible controller
-#
-- name: Copy the archive from the Ansible controller
-  copy:
-    src: "{{ gcloud_archive_path }}"
-    dest: "{{ gcloud_tmp_path }}"
-  when: gcloud_archive_path
+    dest: "{{ gcloud_archive_path }}"
 
 - name: Remove existing google-cloud-sdk dir, it if exists
   file:
     path: "{{ gcloud_install_path }}/google-cloud-sdk"
     state: absent
-  when: gcloud_archive_name
 
-- name: Set installation package path
-  set_fact:
-    archive_path: "{{ gcloud_tmp_path + '/' +  gcloud_archive_name }}"
-  when: gcloud_archive_name
-
-- name: Set installation package path
-  set_fact:
-    archive_path: "{{ gcloud_tmp_path + '/' + gcloud_archive_path | basename }}"
-  when: gcloud_archive_path
-
-- name: Unarchive
-  shell: cd "{{ gcloud_install_path }}" && tar xvzf "{{ archive_path }}"
-  when: gcloud_archive_name
+- name: Extract Cloud SDK archive
+  unarchive:
+    src: "{{ gcloud_archive_path }}"
+    dest: "{{ gcloud_install_path }}"
+    creates: "{{ gcloud_install_path }}/google-cloud-sdk"
 
 - name: Build run script
   template:
@@ -64,7 +45,7 @@
 
 - name: Remove the archive
   file:
-    path: "{{ archive_path }}"
+    path: "{{ gcloud_archive_path }}"
     state: absent
 
 - name: Remove the script
