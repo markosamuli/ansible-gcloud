@@ -45,4 +45,4 @@ gcloud_version: "251.0.0"
 gcloud_setup_shell: true
 
 # Install Cloud SDK from the package manager where available
-gcloud_install_from_package_manager: true
+gcloud_install_from_package_manager: false

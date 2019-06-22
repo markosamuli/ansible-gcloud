@@ -13,6 +13,15 @@ machines.
 
 Do not use this on production servers.
 
+## Configuration
+
+To install Cloud SDK from the package manager where available,enable it in
+Ansible configuration:
+
+```yaml
+gcloud_install_from_package_manager: true
+```
+
 ## Update release
 
 Run following script to update Cloud SDK version in Ansible variables:
