@@ -5,21 +5,38 @@ python: "2.7"
 
 matrix:
   include:
-    - name: "Ubuntu 16.04 (Xenial) with Ansible 2.6"
+    - name: "Ubuntu 16.04 (Xenial) with Ansible 2.6 using APT"
       os: linux
       dist: xenial
       sudo: required
-      env: ANSIBLE_VERSION='<2.7.0'
-    - name: "Ubuntu 16.04 (Xenial) with Ansible 2.7"
+      env: ANSIBLE_VERSION='<2.7.0' FROM_PACKAGE_MANAGER='yes'
+    - name: "Ubuntu 16.04 (Xenial) with Ansible 2.7 using APT"
       os: linux
       dist: xenial
       sudo: required
-      env: ANSIBLE_VERSION='<2.8.0'
-    - name: "Ubuntu 16.04 (Xenial) with Ansible 2.8"
+      env: ANSIBLE_VERSION='<2.8.0' FROM_PACKAGE_MANAGER='yes'
+    - name: "Ubuntu 16.04 (Xenial) with Ansible 2.8 using APT"
       os: linux
       dist: xenial
       sudo: required
-      env: ANSIBLE_VERSION='<2.9.0'
+      env: ANSIBLE_VERSION='<2.9.0' FROM_PACKAGE_MANAGER='yes'
+
+    - name: "Ubuntu 16.04 (Xenial) with Ansible 2.6 using Archive"
+      os: linux
+      dist: xenial
+      sudo: required
+      env: ANSIBLE_VERSION='<2.7.0' FROM_PACKAGE_MANAGER='no'
+    - name: "Ubuntu 16.04 (Xenial) with Ansible 2.7 using Archive"
+      os: linux
+      dist: xenial
+      sudo: required
+      env: ANSIBLE_VERSION='<2.8.0' FROM_PACKAGE_MANAGER='no'
+    - name: "Ubuntu 16.04 (Xenial) with Ansible 2.8 using Archive"
+      os: linux
+      dist: xenial
+      sudo: required
+      env: ANSIBLE_VERSION='<2.9.0' FROM_PACKAGE_MANAGER='no'
+
     - name: "macOS 10.13 (High Sierra) with Xcode 10.1"
       os: osx
       osx_image: xcode10.1
@@ -91,11 +108,26 @@ script:
 
   # Test role run
   - >
-    ansible-playbook tests/test.yml -i tests/inventory --connection=local
+    if [[ "$FROM_PACKAGE_MANAGER" == "yes" ]]; then
+      ansible-playbook tests/test.yml -i tests/inventory --connection=local
+      -e "'gcloud_install_from_package_manager':'True'"
+    else
+      ansible-playbook tests/test.yml -i tests/inventory --connection=local
+      -e "'gcloud_install_from_package_manager':'False'"
+    fi
 
   # Test idempotence
   - >
-    ansible-playbook tests/test.yml -i tests/inventory --connection=local
-    | grep -q 'changed=0.*failed=0'
-    && (echo 'Idempotence test: pass' && exit 0)
-    || (echo 'Idempotence test: fail' && exit 1)
+    if [[ "$FROM_PACKAGE_MANAGER" == "yes" ]]; then
+      ansible-playbook tests/test.yml -i tests/inventory --connection=local
+      -e "'gcloud_install_from_package_manager':'True'"
+      | grep -q 'changed=0.*failed=0'
+      && (echo 'Idempotence test: pass' && exit 0)
+      || (echo 'Idempotence test: fail' && exit 1)
+    else
+      ansible-playbook tests/test.yml -i tests/inventory --connection=local
+      -e "'gcloud_install_from_package_manager':'False'"
+      | grep -q 'changed=0.*failed=0'
+      && (echo 'Idempotence test: pass' && exit 0)
+      || (echo 'Idempotence test: fail' && exit 1)
+    fi
