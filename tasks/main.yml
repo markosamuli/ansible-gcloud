@@ -4,16 +4,19 @@
   include_vars: "{{ item }}"
   with_first_found:
     - files:
-      - "{{ ansible_distribution }}.yml"
-      - "{{ ansible_os_family }}.yml"
+      - "os/{{ ansible_distribution }}.yml"
+      - "os/{{ ansible_os_family }}.yml"
       - "default.yml"
       paths: vars
 
-- include_tasks: debian.yml
+- name: Install Cloud SDK on Debian-based systems
+  include_tasks: debian.yml
   when: ansible_os_family == 'Debian'
 
-- include_tasks: darwin.yml
+- name: Install Cloud SDK on macOS
+  include_tasks: darwin.yml
   when: ansible_os_family == 'Darwin'
 
-- include_tasks: shell.yml
-  when: gcloud_setup_shell
+- name: Setup Cloud SDK in shell scripts
+  include_tasks: shell.yml
+  when: gcloud_setup_shell|bool

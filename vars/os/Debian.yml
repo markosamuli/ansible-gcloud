@@ -1,0 +1,7 @@
+---
+
+# Cloud SDK archive name
+gcloud_archive_name: "google-cloud-sdk-{{ gcloud_version }}-linux-{{ ansible_architecture }}.tar.gz"
+
+# Cloud SDK APT repository
+cloud_sdk_repo: "cloud-sdk-{{ ansible_distribution_release }}"

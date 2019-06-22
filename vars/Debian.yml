@@ -1,3 +1,0 @@
----
-
-cloud_sdk_repo: "cloud-sdk-{{ ansible_distribution_release }}"

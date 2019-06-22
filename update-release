@@ -36,15 +36,41 @@ latest_cloud_sdk_release() {
 ###
 # Update version
 ###
-update_version() {
+update_default_version() {
+    local release=$1
+    update_ansible_defaults ${release}
+}
+
+###
+# Update version
+###
+update_os_version() {
     local os=$1
     local release=$2
-    local checksum=""
     update_ansible_vars ${os} ${release}
 }
 
 ###
-# Update version and checksum variables
+# Update version variable in Ansible defaults
+###
+update_ansible_defaults() {
+    local version=$1
+
+    [ -z "${version}" ] && {
+        error "Version missing"; return 1;
+    }
+
+    local defaults_file=defaults/main.yml
+
+    # Update variables
+    echo "Updating variables in ${defaults_file}"
+    sed -i.save -r "s/^(gcloud_version):.*$/\1: \"${version}\"/" \
+        ${defaults_file}
+    rm ${defaults_file}.save
+}
+
+###
+# Update version variable in OS variables
 ###
 update_ansible_vars() {
     local os=$1
@@ -55,14 +81,17 @@ update_ansible_vars() {
     }
 
     # Ansible vars file to update
+    local ansible_os=""
     if [ "${os}" == "darwin" ] || [ "${os}" == "Darwin" ]; then
-        local ansible_os="Darwin"
+        ansible_os="Darwin"
+    elif [ "${os}" == "debian" ] || [ "${os}" == "Debian" ]; then
+        ansible_os="Debian"
     fi
     [ -z "${ansible_os}" ] && {
-        error "Unsupported OS ${os}"; return 1;
+        error "Unsupported OS: ${os}"; return 1;
     }
 
-    local vars_file=vars/${ansible_os}.yml
+    local vars_file=vars/os/${ansible_os}.yml
 
     # Update variables
     echo "Updating variables in ${vars_file}"
@@ -75,9 +104,11 @@ update_ansible_vars() {
 # Update versions
 ###
 update_versions() {
-    CLOUD_SDK_RELEASE=$(latest_cloud_sdk_release darwin x86_64)
+    CLOUD_SDK_RELEASE=$(latest_cloud_sdk_release linux x86_64)
     echo "Latest Google Cloud SDK release is ${CLOUD_SDK_RELEASE}"
-    update_version Darwin ${CLOUD_SDK_RELEASE}
+    update_default_version ${CLOUD_SDK_RELEASE}
+    update_os_version Debian ${CLOUD_SDK_RELEASE}
+    update_os_version Darwin ${CLOUD_SDK_RELEASE}
 }
 
 set -e
