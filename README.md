@@ -15,12 +15,14 @@ Do not use this on production servers.
 
 ## Configuration
 
-To install Cloud SDK from the package manager where available,enable it in
+To install Cloud SDK from the package manager where available, enable it in
 Ansible configuration:
 
 ```yaml
 gcloud_install_from_package_manager: true
 ```
+
+This is only supported on Debian-based systems with APT repositories.
 
 ## Update release
 
