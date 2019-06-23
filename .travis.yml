@@ -1,48 +1,17 @@
+# -*- mode: yaml -*-
+# vim:ts=2:sw=2:ai:si:syntax=yaml
+#########################
+# Travis CI configuration
+#########################
 ---
 
+# Run tests against pull requests and main branches only
+if: |
+  type = pull_request OR \
+  branch IN (master, develop)
+
 language: generic
-python: "2.7"
-
-matrix:
-  include:
-    - name: "Ubuntu 16.04 (Xenial) with Ansible 2.6 using APT"
-      os: linux
-      dist: xenial
-      sudo: required
-      env: ANSIBLE_VERSION='<2.7.0' FROM_PACKAGE_MANAGER='yes'
-    - name: "Ubuntu 16.04 (Xenial) with Ansible 2.7 using APT"
-      os: linux
-      dist: xenial
-      sudo: required
-      env: ANSIBLE_VERSION='<2.8.0' FROM_PACKAGE_MANAGER='yes'
-    - name: "Ubuntu 16.04 (Xenial) with Ansible 2.8 using APT"
-      os: linux
-      dist: xenial
-      sudo: required
-      env: ANSIBLE_VERSION='<2.9.0' FROM_PACKAGE_MANAGER='yes'
-
-    - name: "Ubuntu 16.04 (Xenial) with Ansible 2.6 using Archive"
-      os: linux
-      dist: xenial
-      sudo: required
-      env: ANSIBLE_VERSION='<2.7.0' FROM_PACKAGE_MANAGER='no'
-    - name: "Ubuntu 16.04 (Xenial) with Ansible 2.7 using Archive"
-      os: linux
-      dist: xenial
-      sudo: required
-      env: ANSIBLE_VERSION='<2.8.0' FROM_PACKAGE_MANAGER='no'
-    - name: "Ubuntu 16.04 (Xenial) with Ansible 2.8 using Archive"
-      os: linux
-      dist: xenial
-      sudo: required
-      env: ANSIBLE_VERSION='<2.9.0' FROM_PACKAGE_MANAGER='no'
-
-    - name: "macOS 10.13 (High Sierra) with Xcode 10.1"
-      os: osx
-      osx_image: xcode10.1
-    - name: "macOS 10.14 (Mojave) with Xcode 10.2.1"
-      os: osx
-      osx_image: xcode10.2
+sudo: required
 
 # Install Ansible and Python development packages
 addons:
@@ -50,6 +19,7 @@ addons:
     packages:
       - python-pip
       - python-dev
+    update: true
   homebrew:
     packages:
       - ansible
@@ -60,44 +30,18 @@ cache:
   directories:
     - $HOME/.cache/pre-commit/
 
-branches:
-  only:
-    - master
-    - develop
-    - /^feature\/.*$/
-    - /^bugfix\/.*$/
-    - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
-
-before_cache:
-  - rm -f $HOME/.cache/pre-commit/pre-commit.log
-
-before_install:
-  # Update Homebrew before installation
-  - >
-    if [[ "$BREW_UPGRADE" == "yes" ]]; then
-      brew update
-    fi
-
 install:
-  # Install Ansible with Homebrew on OSX
-  - >
-    if [[ "$BREW_UPGRADE" == "yes" ]]; then
-      brew upgrade ansible
-    fi
-
-  # upgrade pre-commit with Homebrew
-  - >
-    if [[ "$BREW_UPGRADE" == "yes" ]]; then
-      brew upgrade pre-commit
-    fi
-
-  # Install Ansible with pip
+  # Install Ansible with pip on Ubuntu
   - >
     if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then
-      pip install --user ansible${ANSIBLE_VERSION}
+      if [[ -z "$ANSIBLE_VERSION" ]]; then
+        pip install --user ansible
+      else
+        pip install --user ansible${ANSIBLE_VERSION}
+      fi
     fi
 
-  # Install pre-commit with pip
+  # Install pre-commit with pip on Ubuntu
   - >
     if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then
       pip install --user pre-commit
@@ -111,12 +55,12 @@ install:
 
 before_script:
   # https://github.com/travis-ci/travis-ci/issues/6307
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then rvm get head || true; fi
+  - >
+    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      rvm get head || true
+    fi
 
 script:
-
-  # Run pre-commit hooks
-  - pre-commit run -a || travis_terminate 1
 
   # Basic role syntax check
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
@@ -125,10 +69,12 @@ script:
   - >
     if [[ "$FROM_PACKAGE_MANAGER" == "yes" ]]; then
       ansible-playbook tests/test.yml -i tests/inventory --connection=local \
-        -e "'gcloud_install_from_package_manager':'True'"
+        -e "'gcloud_install_from_package_manager':'True'" \
+        || travis_terminate 1
     else
       ansible-playbook tests/test.yml -i tests/inventory --connection=local \
-        -e "'gcloud_install_from_package_manager':'False'"
+        -e "'gcloud_install_from_package_manager':'False'" \
+        || travis_terminate 1
     fi
 
   # Test idempotence
@@ -146,6 +92,67 @@ script:
         && (echo 'Idempotence test: pass' && exit 0) \
         || (echo 'Idempotence test: fail' && exit 1)
     fi
+
+before_cache:
+  - rm -f $HOME/.cache/pre-commit/pre-commit.log
+
+stages:
+  - validate
+  - test
+
+jobs:
+  include:
+
+    # Run validation stage in Linux with latest Ansible only
+    - stage: validate
+      name: Validate with pre-commit
+      os: linux
+      dist: xenial
+      language: minimal
+      script:
+        - pre-commit run -a
+
+  # Run tests
+    - stage: test
+      name: "Ubuntu 16.04 (Xenial) with Ansible 2.6 using APT"
+      os: linux
+      dist: xenial
+      env: ANSIBLE_VERSION='<2.7.0' FROM_PACKAGE_MANAGER='yes'
+    - stage: test
+      name: "Ubuntu 16.04 (Xenial) with Ansible 2.7 using APT"
+      os: linux
+      dist: xenial
+      env: ANSIBLE_VERSION='<2.8.0' FROM_PACKAGE_MANAGER='yes'
+    - stage: test
+      name: "Ubuntu 18.04 (Bionic) with Ansible 2.8 using APT"
+      os: linux
+      dist: bionic
+      env: ANSIBLE_VERSION='<2.9.0' FROM_PACKAGE_MANAGER='yes'
+
+    - stage: test
+      name: "Ubuntu 16.04 (Xenial) with Ansible 2.6 using Archive"
+      os: linux
+      dist: xenial
+      env: ANSIBLE_VERSION='<2.7.0' FROM_PACKAGE_MANAGER='no'
+    - stage: test
+      name: "Ubuntu 16.04 (Xenial) with Ansible 2.7 using Archive"
+      os: linux
+      dist: xenial
+      env: ANSIBLE_VERSION='<2.8.0' FROM_PACKAGE_MANAGER='no'
+    - stage: test
+      name: "Ubuntu 18.04 (Bionic) with Ansible 2.8 using Archive"
+      os: linux
+      dist: bionic
+      env: ANSIBLE_VERSION='<2.9.0' FROM_PACKAGE_MANAGER='no'
+
+    - stage: test
+      name: "macOS 10.13 (High Sierra) with Xcode 10.1"
+      os: osx
+      osx_image: xcode10.1
+    - stage: test
+      name: "macOS 10.14 (Mojave) with Xcode 10.2.1"
+      os: osx
+      osx_image: xcode10.2
 
 notifications:
   webhooks:
