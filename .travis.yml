@@ -69,11 +69,11 @@ script:
   - >
     if [[ "$FROM_PACKAGE_MANAGER" == "yes" ]]; then
       ansible-playbook tests/test.yml -i tests/inventory --connection=local \
-        -e "'gcloud_install_from_package_manager':'True'" \
+        -e "{'gcloud_install_from_package_manager':'True'}" \
         || travis_terminate 1
     else
       ansible-playbook tests/test.yml -i tests/inventory --connection=local \
-        -e "'gcloud_install_from_package_manager':'False'" \
+        -e "{'gcloud_install_from_package_manager':'False'}" \
         || travis_terminate 1
     fi
 
@@ -81,13 +81,13 @@ script:
   - >
     if [[ "$FROM_PACKAGE_MANAGER" == "yes" ]]; then
       ansible-playbook tests/test.yml -i tests/inventory --connection=local \
-      -e "'gcloud_install_from_package_manager':'True'" \
+      -e "{'gcloud_install_from_package_manager':'True'}" \
         | grep -q 'changed=0.*failed=0' \
         && (echo 'Idempotence test: pass' && exit 0) \
         || (echo 'Idempotence test: fail' && exit 1)
     else
       ansible-playbook tests/test.yml -i tests/inventory --connection=local \
-      -e "'gcloud_install_from_package_manager':'False'" \
+      -e "{'gcloud_install_from_package_manager':'False'}" \
         | grep -q 'changed=0.*failed=0' \
         && (echo 'Idempotence test: pass' && exit 0) \
         || (echo 'Idempotence test: fail' && exit 1)
