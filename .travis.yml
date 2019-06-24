@@ -11,7 +11,6 @@ if: |
   branch IN (master, develop)
 
 language: generic
-sudo: required
 
 # Install Ansible and Python development packages
 addons:
