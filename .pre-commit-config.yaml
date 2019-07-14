@@ -40,7 +40,7 @@ repos:
         files: (update-.*|tests/run-.*|tests/update)$
 
   - repo: https://github.com/openstack-dev/bashate.git
-    rev: 0.6.0
+    rev: '0.6.0'
     hooks:
       - id: bashate
         files: (update-.*|tests/run-.*|tests/update)$
