@@ -1,27 +1,26 @@
 ---
 
 - name: Install Cloud SDK from APT
+  become: true
   block:
 
-  - name: Update ca-certificates
-    apt:
-      name: ca-certificates
+    - name: Update ca-certificates
+      apt:
+        name: ca-certificates
 
-  - name: Install apt-transport-https
-    apt:
-      name: apt-transport-https
+    - name: Install apt-transport-https
+      apt:
+        name: apt-transport-https
 
-  - name: Import the Google Cloud Platform public key
-    apt_key:
-      url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    - name: Import the Google Cloud Platform public key
+      apt_key:
+        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
 
-  - name: Add the Cloud SDK distribution URI as a package source
-    apt_repository:
-      repo: 'deb {{ cloud_sdk_apt_url }} {{ cloud_sdk_repo }} main'
+    - name: Add the Cloud SDK distribution URI as a package source
+      apt_repository:
+        repo: 'deb {{ cloud_sdk_apt_url }} {{ cloud_sdk_repo }} main'
 
-  - name: Install the Cloud SDK
-    apt:
-      name: google-cloud-sdk
-      update_cache: true
-
-  become: true
+    - name: Install the Cloud SDK
+      apt:
+        name: google-cloud-sdk
+        update_cache: true
