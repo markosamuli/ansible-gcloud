@@ -26,11 +26,28 @@ This is only supported on Debian-based systems with APT repositories.
 
 ## Update release
 
-Run following script to update Cloud SDK version in Ansible variables:
+Update Cloud SDK version in Ansible variables:
 
 ```bash
-./update-release
+make update
 ```
+
+## Coding style
+
+Install pre-commit hooks and validate coding style:
+
+```bash
+make lint
+```
+
+## Run tests
+
+Run tests in Ubuntu and Debian using Docker:
+
+```bash
+make test
+```
+
 
 ## License
 
