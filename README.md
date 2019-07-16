@@ -48,7 +48,6 @@ Run tests in Ubuntu and Debian using Docker:
 make test
 ```
 
-
 ## License
 
 - [MIT](LICENSE)
