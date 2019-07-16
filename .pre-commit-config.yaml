@@ -51,3 +51,10 @@ repos:
     rev: v0.17.0
     hooks:
       - id: markdownlint
+
+  - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook.git
+    rev: '2.0.0'
+    hooks:
+      - id: commitlint
+        stages: [commit-msg]
+        additional_dependencies: ['@commitlint/config-conventional']
