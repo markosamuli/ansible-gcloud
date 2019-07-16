@@ -1,8 +1,5 @@
 FROM ubuntu:bionic
 
-ARG user=test
-ARG repository=ansible-gcloud
-
 RUN apt-get update && apt-get install -y \
     python-minimal \
     python-pip \
@@ -16,6 +13,13 @@ RUN apt-get update && apt-get install -y \
     zsh \
     sudo \
  && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update && apt-get install -y \
+    aptitude \
+ && rm -rf /var/lib/apt/lists/*
+
+ARG user=test
+ARG repository=ansible-gcloud
 
 # Create test user
 RUN useradd -m ${user} -s /bin/bash \
