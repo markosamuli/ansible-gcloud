@@ -64,8 +64,13 @@ update_ansible_defaults() {
 
     # Update variables
     echo "Updating variables in ${defaults_file}"
-    sed -i.save -r "s/^(gcloud_version):.*$/\1: \"${version}\"/" \
+    if test "$(uname)" = "Darwin"; then
+        sed -i.save -E "s/^(gcloud_version):.*$/\1: \"${version}\"/" \
+            ${defaults_file}
+    else
+        sed -i.save -r "s/^(gcloud_version):.*$/\1: \"${version}\"/" \
         ${defaults_file}
+    fi
     rm ${defaults_file}.save
 }
 
@@ -95,8 +100,13 @@ update_ansible_vars() {
 
     # Update variables
     echo "Updating variables in ${vars_file}"
-    sed -i.save -r "s/^(gcloud_version):.*$/\1: \"${version}\"/" \
-        ${vars_file}
+    if test "$(uname)" = "Darwin"; then
+        sed -i.save -E "s/^(gcloud_version):.*$/\1: \"${version}\"/" \
+            ${vars_file}
+    else
+        sed -i.save -r "s/^(gcloud_version):.*$/\1: \"${version}\"/" \
+            ${vars_file}
+    fi
     rm ${vars_file}.save
 }
 
