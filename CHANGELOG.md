@@ -1,5 +1,34 @@
 # Changelog
 
+## [2.1.0] - 2019-11-19
+
+### Changes
+
+* Cloud SDK release 271.0.0
+* Changed default installation path from `~/opt/google-cloud-sdk` to
+  `~/google-cloud-sdk` with backwards compatible detection of the old
+  default installation location
+* Automatically added blocks in `.bashrc` and `.zshrc` do not look for other
+  installation paths
+
+### Development improvements
+
+* Added `Makefile` with tasks for development
+* Improved Travis CI performance with multiple build stages
+* Added GitHub Actions workflow with pre-commit hooks for running linting tasks
+  when new code is pushed to the repository
+* Added [commitlint] commit-msg hook
+* Fixed bash scripts not working on macOS with BSD sed
+* Workaround for [ansible-lint installation issue][ansible-lint#590] on Travis
+* Move bash scripts out of the repository root
+* Format shell scripts with [shfmt]
+* Validate shell scripts with [shellcheck]
+
+[shfmt]: https://github.com/mvdan/sh
+[shellcheck]: https://github.com/koalaman/shellcheck
+[ansible-lint#590]: https://github.com/ansible/ansible-lint/issues/590
+[commitlint]: https://github.com/conventional-changelog/commitlint
+
 ## [2.0.0] - 2019-06-22
 
 ## Breaking changes
