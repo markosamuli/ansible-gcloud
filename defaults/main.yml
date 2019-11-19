@@ -39,7 +39,7 @@ gcloud_additional_components: []
 gcloud_debug: true
 
 # Cloud SDK version to install
-gcloud_version: "254.0.0"
+gcloud_version: "271.0.0"
 
 # Setup shell init scripts
 gcloud_setup_shell: true
