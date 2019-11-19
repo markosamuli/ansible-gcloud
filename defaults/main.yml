@@ -11,8 +11,8 @@ gcloud_tmp_path: /tmp/install_gcloud
 # User home directory.
 gcloud_home: "{{ ansible_env.HOME }}"
 
-# Path on target node where the unarchived files should land.
-gcloud_install_path: "{{ gcloud_home }}/opt"
+# Installation directory relative to user home directory.
+gcloud_install_dir: "default"
 
  # Enable usage reporting?
 gcloud_usage_reporting: false
@@ -43,6 +43,12 @@ gcloud_version: "254.0.0"
 
 # Setup shell init scripts
 gcloud_setup_shell: true
+
+# Path to .bashrc
+gcloud_bashrc_path: "{{ gcloud_home }}/.bashrc"
+
+# Path to .zshrc
+gcloud_zshrc_path: "{{ gcloud_home }}/.zshrc"
 
 # Install Cloud SDK from the package manager where available
 gcloud_install_from_package_manager: false

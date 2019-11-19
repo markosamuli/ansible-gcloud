@@ -1,0 +1,38 @@
+---
+
+- name: Resolve .bashrc symlink
+  set_fact:
+    gcloud_bashrc_path: "{{ gcloud_bashrc_st.stat.lnk_source }}"
+  when: gcloud_bashrc_st.stat.islnk
+
+- name: Check whether CLOUDSDK_ROOT_DIR is defined in .bashrc
+  command: grep -Fq "export CLOUDSDK_ROOT_DIR=" {{ gcloud_bashrc_path }}
+  register: check_bashrc
+  ignore_errors: true
+  changed_when: false
+  failed_when: false
+
+- name: Load Google Cloud SDK in .bashrc when installed from archive
+  blockinfile:
+    dest: "{{ gcloud_bashrc_path }}"
+    block: |
+      # Created by markosamuli.gcloud Ansible role
+      if [ -d "$HOME{{ gcloud_install_dir }}/google-cloud-sdk" ]; then
+        export CLOUDSDK_ROOT_DIR="$HOME{{ gcloud_install_dir }}/google-cloud-sdk"
+        # Update PATH for the Google Cloud SDK.
+        source $CLOUDSDK_ROOT_DIR/path.bash.inc
+        # Enable bash completion for gcloud.
+        source $CLOUDSDK_ROOT_DIR/completion.bash.inc
+      fi
+  when: gcloud_install_from_archive and check_bashrc.rc != 0
+
+- name: Load Google Cloud SDK in .bashrc when installed from APT
+  blockinfile:
+    dest: "{{ gcloud_bashrc_path }}"
+    block: |
+      # Created by markosamuli.gcloud Ansible role
+      if [ -d "/usr/share/google-cloud-sdk" ]; then
+        # Enable bash completion for gcloud.
+        source /usr/share/google-cloud-sdk/completion.bash.inc
+      fi
+  when: gcloud_install_from_apt
