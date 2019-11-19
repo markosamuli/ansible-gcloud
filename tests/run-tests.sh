@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT=$(dirname "$DIR")
+TESTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT=$(dirname "$TESTS_DIR")
 
 ROLE_NAME="$(basename "$PROJECT_ROOT")"
 TEST_HOME=/home/test
@@ -20,8 +20,7 @@ detect_wsl() {
 # Stop all containers
 finish() {
     local containers=""
-    # shellcheck disable=SC2086
-    containers=$(docker ps -q --filter=name=${ROLE_NAME})
+    containers=$(docker ps -q --filter=name="${ROLE_NAME}")
     if [ -n "${containers}" ]; then
         echo "*** Stop all test containers"
         # shellcheck disable=SC2086
@@ -32,7 +31,7 @@ finish() {
 # Stop container
 stop() {
     local image=$1
-    local container_name=${ROLE_NAME}-${image}-tests
+    local container_name="${ROLE_NAME}-${image}-tests"
     echo "*** Stop containers"
     docker stop "${container_name}"
 }
@@ -40,7 +39,7 @@ stop() {
 # Build image
 build() {
     local image=$1
-    local image_name=${ROLE_NAME}-${image}
+    local image_name="${ROLE_NAME}-${image}"
     echo "*** Build image"
     docker build -t "${image_name}" "./tests/${image}"
 }
@@ -48,14 +47,15 @@ build() {
 # Start container in the background
 start() {
     local image=$1
-    local image_name=${ROLE_NAME}-${image}
-    local container_name=${ROLE_NAME}-${image}-tests
+    local image_name="${ROLE_NAME}-${image}"
+    local container_name="${ROLE_NAME}-${image}-tests"
     echo "*** Start container"
     docker run --rm -it -d \
         -v "${MOUNT_ROOT}:${TEST_HOME}/${ROLE_NAME}" \
         --name "${container_name}" \
-        "$image_name"
+        "${image_name}"
 }
+
 # Run tests in the container
 run_tests() {
     local image=$1
@@ -82,7 +82,7 @@ run_tests() {
 run_test_script() {
     local image=$1
     local test_script=$2
-    local container_name=${ROLE_NAME}-${image}-tests
+    local container_name="${ROLE_NAME}-${image}-tests"
     echo "*** Run tests with ${test_script} in ${image}"
     docker exec -it \
         --user test \
@@ -94,7 +94,7 @@ trap finish EXIT
 
 detect_wsl
 
-cd "$DIR"
+cd "${TESTS_DIR}"
 
 images=("$@")
 if [ ${#images[@]} -eq 0 ]; then
