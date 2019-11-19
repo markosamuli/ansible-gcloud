@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-TESTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+TESTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # shellcheck source=tests/utils.sh
 source "${TESTS_DIR}/utils.sh"

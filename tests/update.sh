@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-TESTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+TESTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT=$(dirname "$TESTS_DIR")
 ROLE_NAME="$(basename "$PROJECT_ROOT")"
 
@@ -14,14 +14,14 @@ update_dockerfile() {
             -e 's!%%USER%%!'"$user"'!g' \
             -e 's!%%REPOSITORY%%!'"$repository"'!g' \
             -e 's!%%ANSIBLE_VERSION%%!'"$ansible_version"'!g' \
-            "Dockerfile.template" > "$release/Dockerfile"
+            "Dockerfile.template" >"$release/Dockerfile"
     else
         sed -r \
             -e 's!%%FROM%%!'"$image:$release"'!g' \
             -e 's!%%USER%%!'"$user"'!g' \
             -e 's!%%REPOSITORY%%!'"$repository"'!g' \
             -e 's!%%ANSIBLE_VERSION%%!'"$ansible_version"'!g' \
-            "Dockerfile.template" > "$release/Dockerfile"
+            "Dockerfile.template" >"$release/Dockerfile"
     fi
 }
 

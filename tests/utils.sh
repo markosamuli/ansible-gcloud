@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-TESTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+TESTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT=$(dirname "$TESTS_DIR")
 export PROJECT_ROOT
 
@@ -19,7 +19,7 @@ syntax_check() {
 }
 
 run_tests() {
-    local ansible_vars=( "$@" )
+    local ansible_vars=("$@")
     local extra_vars
     extra_vars=$(printf ",%s" "${ansible_vars[@]}")
     extra_vars="{${extra_vars:1}}"

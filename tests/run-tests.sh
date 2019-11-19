@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT=$(dirname "$DIR")
 
 ROLE_NAME="$(basename "$PROJECT_ROOT")"
 TEST_HOME=/home/test
 
 # Detect Windows Subsystem for Linux
-function detect_wsl {
+detect_wsl() {
     is_wsl=0
     if [ -e /proc/version ]; then
         if grep -q Microsoft /proc/version; then
@@ -18,7 +18,7 @@ function detect_wsl {
 }
 
 # Stop all containers
-function finish {
+finish() {
     local containers=""
     # shellcheck disable=SC2086
     containers=$(docker ps -q --filter=name=${ROLE_NAME})
@@ -30,7 +30,7 @@ function finish {
 }
 
 # Stop container
-function stop {
+stop() {
     local image=$1
     local container_name=${ROLE_NAME}-${image}-tests
     echo "*** Stop containers"
@@ -38,7 +38,7 @@ function stop {
 }
 
 # Build image
-function build {
+build() {
     local image=$1
     local image_name=${ROLE_NAME}-${image}
     echo "*** Build image"
@@ -46,7 +46,7 @@ function build {
 }
 
 # Start container in the background
-function start {
+start() {
     local image=$1
     local image_name=${ROLE_NAME}-${image}
     local container_name=${ROLE_NAME}-${image}-tests
@@ -57,7 +57,7 @@ function start {
         "$image_name"
 }
 # Run tests in the container
-function run_tests {
+run_tests() {
     local image=$1
     local test_scripts=(
         "test_syntax.sh"
@@ -79,7 +79,7 @@ function run_tests {
 }
 
 # Run tests in the container
-function run_test_script {
+run_test_script() {
     local image=$1
     local test_script=$2
     local container_name=${ROLE_NAME}-${image}-tests
@@ -96,10 +96,10 @@ detect_wsl
 
 cd "$DIR"
 
-images=( "$@" )
+images=("$@")
 if [ ${#images[@]} -eq 0 ]; then
-    images=( */Dockerfile )
-    images=( "${images[@]/\/Dockerfile/}" )
+    images=(*/Dockerfile)
+    images=("${images[@]/\/Dockerfile/}")
 fi
 
 cd "$PROJECT_ROOT"
