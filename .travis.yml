@@ -22,12 +22,7 @@ addons:
   homebrew:
     packages:
       - ansible
-      - pre-commit
     update: true
-
-cache:
-  directories:
-    - $HOME/.cache/pre-commit/
 
 install:
   # Install Ansible with pip on Ubuntu
@@ -38,12 +33,6 @@ install:
       else
         pip install --user ansible${ANSIBLE_VERSION}
       fi
-    fi
-
-  # Install pre-commit with pip on Ubuntu
-  - >
-    if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then
-      pip install --user pre-commit
     fi
 
   # Check Ansible version
@@ -68,11 +57,11 @@ script:
   - >
     if [[ "$FROM_PACKAGE_MANAGER" == "yes" ]]; then
       ansible-playbook tests/test.yml -i tests/inventory --connection=local \
-        -e "{'gcloud_install_from_package_manager':'True'}" \
+        -e "{'gcloud_install_from_package_manager':true}" \
         || travis_terminate 1
     else
       ansible-playbook tests/test.yml -i tests/inventory --connection=local \
-        -e "{'gcloud_install_from_package_manager':'False'}" \
+        -e "{'gcloud_install_from_package_manager':false}" \
         || travis_terminate 1
     fi
 
@@ -80,20 +69,17 @@ script:
   - >
     if [[ "$FROM_PACKAGE_MANAGER" == "yes" ]]; then
       ansible-playbook tests/test.yml -i tests/inventory --connection=local \
-      -e "{'gcloud_install_from_package_manager':'True'}" \
+      -e "{'gcloud_install_from_package_manager':true}" \
         | grep -q 'changed=0.*failed=0' \
         && (echo 'Idempotence test: pass' && exit 0) \
         || (echo 'Idempotence test: fail' && exit 1)
     else
       ansible-playbook tests/test.yml -i tests/inventory --connection=local \
-      -e "{'gcloud_install_from_package_manager':'False'}" \
+      -e "{'gcloud_install_from_package_manager':false}" \
         | grep -q 'changed=0.*failed=0' \
         && (echo 'Idempotence test: pass' && exit 0) \
         || (echo 'Idempotence test: fail' && exit 1)
     fi
-
-before_cache:
-  - rm -f $HOME/.cache/pre-commit/pre-commit.log
 
 stages:
   - validate
@@ -108,8 +94,19 @@ jobs:
       os: linux
       dist: xenial
       language: minimal
+      install:
+        # Fix ansible-lint installation issues
+        # https://github.com/ansible/ansible-lint/issues/590
+        - pip install --user virtualenv==16.3.0
+        # Install pre-commit with pip
+        - pip install --user pre-commit
       script:
         - pre-commit run -a
+      before_cache:
+        - rm -f $HOME/.cache/pre-commit/pre-commit.log
+      cache:
+        directories:
+          - $HOME/.cache/pre-commit/
 
   # Run tests
     - stage: test

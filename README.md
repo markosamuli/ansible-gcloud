@@ -15,6 +15,25 @@ Do not use this on production servers.
 
 ## Configuration
 
+### Installation location
+
+The role installs Cloud SDK by default into `~/google-cloud-sdk`.
+
+To install to another location, change the `gcloud_install_dir` variable. It
+will be used as the installation directory relative to the user home directory.
+
+For example to install into `~/opt/google-cloud-sdk`, you can set:
+
+```yaml
+gcloud_install_dir: "opt"
+```
+
+For backwards compatibility, the role will automatically detect existing
+installation in `~/opt/google-cloud-sdk` and default to this location
+if found.
+
+### Install using package manager
+
 To install Cloud SDK from the package manager where available, enable it in
 Ansible configuration:
 

@@ -1,5 +1,11 @@
 ---
 
+- name: Check installation path has been configured
+  assert:
+    that:
+      - gcloud_install_dir != 'default'
+      - gcloud_install_path is defined
+
 - name: Look for existing Google Cloud SDK installation
   stat:
     path: "{{ gcloud_install_path }}/google-cloud-sdk"

@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+SCRIPTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT=$(dirname "$SCRIPTS_DIR")
+
 ###
 # Print error into STDERR
 ###
@@ -16,10 +19,16 @@ latest_cloud_sdk_release() {
     local bucket="cloud-sdk-release"
     local prefix="google-cloud-sdk-"
 
-    [ -z "${os}" ] && { error "OS missing"; return 1; }
-    [ -z "${arch}" ] && { error "architecture missing"; return 1; }
+    [ -z "${os}" ] && {
+        error "OS missing"
+        return 1
+    }
+    [ -z "${arch}" ] && {
+        error "architecture missing"
+        return 1
+    }
 
-    os=$(echo ${os} | awk '{print tolower($0)}')
+    os=$(echo "${os}" | awk '{print tolower($0)}')
     if [ "${os}" == "darwin" ] || [ "${os}" == "linux" ]; then
         local suffix="-${os}-${arch}.tar.gz"
     else
@@ -27,9 +36,9 @@ latest_cloud_sdk_release() {
         return 1
     fi
 
-    gsutil ls "gs://${bucket}/${prefix}*${suffix}" | \
-        sed "s/gs:\/\/${bucket}\/${prefix}//g" | \
-        sed "s/${suffix}//g" | \
+    gsutil ls "gs://${bucket}/${prefix}*${suffix}" |
+        sed "s/gs:\/\/${bucket}\/${prefix}//g" |
+        sed "s/${suffix}//g" |
         sort -nr | head -1
 }
 
@@ -38,7 +47,7 @@ latest_cloud_sdk_release() {
 ###
 update_default_version() {
     local release=$1
-    update_ansible_defaults ${release}
+    update_ansible_defaults "${release}"
 }
 
 ###
@@ -47,7 +56,7 @@ update_default_version() {
 update_os_version() {
     local os=$1
     local release=$2
-    update_ansible_vars ${os} ${release}
+    update_ansible_vars "${os}" "${release}"
 }
 
 ###
@@ -57,16 +66,22 @@ update_ansible_defaults() {
     local version=$1
 
     [ -z "${version}" ] && {
-        error "Version missing"; return 1;
+        error "Version missing"
+        return 1
     }
 
     local defaults_file=defaults/main.yml
 
     # Update variables
     echo "Updating variables in ${defaults_file}"
-    sed -i.save -r "s/^(gcloud_version):.*$/\1: \"${version}\"/" \
-        ${defaults_file}
-    rm ${defaults_file}.save
+    if test "$(uname)" = "Darwin"; then
+        sed -i.save -E "s/^(gcloud_version):.*$/\1: \"${version}\"/" \
+            "${defaults_file}"
+    else
+        sed -i.save -r "s/^(gcloud_version):.*$/\1: \"${version}\"/" \
+            "${defaults_file}"
+    fi
+    rm "${defaults_file}.save"
 }
 
 ###
@@ -77,7 +92,8 @@ update_ansible_vars() {
     local version=$2
 
     [ -z "${version}" ] && {
-        error "Version missing"; return 1;
+        error "Version missing"
+        return 1
     }
 
     # Ansible vars file to update
@@ -88,15 +104,21 @@ update_ansible_vars() {
         ansible_os="Debian"
     fi
     [ -z "${ansible_os}" ] && {
-        error "Unsupported OS: ${os}"; return 1;
+        error "Unsupported OS: ${os}"
+        return 1
     }
 
     local vars_file=vars/os/${ansible_os}.yml
 
     # Update variables
     echo "Updating variables in ${vars_file}"
-    sed -i.save -r "s/^(gcloud_version):.*$/\1: \"${version}\"/" \
-        ${vars_file}
+    if test "$(uname)" = "Darwin"; then
+        sed -i.save -E "s/^(gcloud_version):.*$/\1: \"${version}\"/" \
+            ${vars_file}
+    else
+        sed -i.save -r "s/^(gcloud_version):.*$/\1: \"${version}\"/" \
+            ${vars_file}
+    fi
     rm ${vars_file}.save
 }
 
@@ -104,13 +126,16 @@ update_ansible_vars() {
 # Update versions
 ###
 update_versions() {
-    CLOUD_SDK_RELEASE=$(latest_cloud_sdk_release linux x86_64)
-    echo "Latest Google Cloud SDK release is ${CLOUD_SDK_RELEASE}"
-    update_default_version ${CLOUD_SDK_RELEASE}
-    update_os_version Debian ${CLOUD_SDK_RELEASE}
-    update_os_version Darwin ${CLOUD_SDK_RELEASE}
+    local cloudsdk_version
+    cloudsdk_version=$(latest_cloud_sdk_release linux x86_64)
+    echo "Latest Google Cloud SDK release is ${cloudsdk_version}"
+    update_default_version "${cloudsdk_version}"
+    update_os_version Debian "${cloudsdk_version}"
+    update_os_version Darwin "${cloudsdk_version}"
 }
 
 set -e
+
+cd "${PROJECT_ROOT}"
 
 update_versions

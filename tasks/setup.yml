@@ -1,0 +1,36 @@
+---
+
+- name: Load variables for the target system
+  include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+        - "os/{{ ansible_distribution }}.yml"
+        - "os/{{ ansible_os_family }}.yml"
+        - "default.yml"
+      paths: vars
+
+- name: Install from archive on macOS
+  set_fact:
+    gcloud_install_from_archive: true
+    gcloud_install_from_apt: false
+  when: ansible_os_family == 'Darwin'
+
+- name: Install from archive on Debian
+  set_fact:
+    gcloud_install_from_archive: true
+    gcloud_install_from_apt: false
+  when: >-
+    ansible_os_family == 'Debian'
+    and not gcloud_install_from_package_manager
+
+- name: Install using APT on Debian
+  set_fact:
+    gcloud_install_from_archive: false
+    gcloud_install_from_apt: true
+  when: >-
+    ansible_os_family == 'Debian'
+    and gcloud_install_from_package_manager
+
+- name: Configure archive installation paths
+  when: gcloud_install_from_archive
+  include_tasks: setup_archive.yml

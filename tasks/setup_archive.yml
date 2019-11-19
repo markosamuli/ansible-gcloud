@@ -1,0 +1,37 @@
+---
+
+- name: Configure custom installation path
+  when: gcloud_install_path is defined
+  block:
+
+    - name: Set gcloud_install_dir variable from gcloud_install_path
+      set_fact:
+        gcloud_install_dir: "{{ gcloud_install_path | replace(gcloud_home, '') }}"
+
+    - name: Installation path must be under user home
+      assert:
+        that:
+          - gcloud_install_path == gcloud_home + gcloud_install_dir
+
+- name: Configure default installation path
+  when: gcloud_install_dir == 'default'
+  block:
+
+    - name: Check existing installation in ~/opt/google-cloud-sdk
+      stat:
+        path: "{{ gcloud_home }}/opt/google-cloud-sdk"
+      register: gcloud_opt_st
+
+    - name: Set installation path to ~/opt/google-cloud-sdk
+      set_fact:
+        gcloud_install_dir: "/opt"
+      when: gcloud_opt_st.stat.exists
+
+    - name: Set installation path to ~/google-cloud-sdk
+      set_fact:
+        gcloud_install_dir: ""
+      when: not gcloud_opt_st.stat.exists
+
+- name: Set gcloud_install_path variable
+  set_fact:
+    gcloud_install_path: "{{ gcloud_home }}{{ gcloud_install_dir }}"
