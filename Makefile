@@ -15,7 +15,7 @@ test-update:
 
 .PHONY: update
 update:
-	@./update-release
+	@./scripts/update-release.sh
 
 .PHONY: lint
 lint: install-git-hooks

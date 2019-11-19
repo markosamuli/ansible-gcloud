@@ -8,11 +8,6 @@ insert_final_newline = true
 trim_trailing_whitespace = true
 charset = utf-8
 
-# Shell scripts without extension
-[{update-*,tests/run-*,tests/update}]
-indent_style = space
-indent_size = 4
-
 # Shell scripts
 [{*.sh}]
 indent_style = space
