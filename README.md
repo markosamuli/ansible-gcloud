@@ -5,8 +5,8 @@
 
 | Branch  | Travis Builds | Code Quality |
 |---------|--------|--------------|
-| master  | [![Build Status][travis-master]][travis] | [![Build Status][gh-master]] |
-| develop | [![Build Status][travis-develop]][travis] | [![Build Status][gh-develop]] |
+| master  | [![Build Status][travis-master]][travis] | ![Build Status][gh-master] |
+| develop | [![Build Status][travis-develop]][travis] | ![Build Status][gh-develop] |
 
 [travis]: https://travis-ci.org/markosamuli/ansible-gcloud
 [travis-master]: https://travis-ci.org/markosamuli/ansible-gcloud.svg?branch=master
