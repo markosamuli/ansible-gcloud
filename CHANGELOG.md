@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.1.1] - 2019-11-20
+
+### Documentation
+
+* Updated documentation to include a fix into the configuration example
+  and explain bash and zsh shell configuration.
+
+### Development improvements
+
+* Improved development bash scripts and coding style.
+* Updated Docker images used for testing.
+
 ## [2.1.0] - 2019-11-19
 
 ### Changes
