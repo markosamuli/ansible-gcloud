@@ -3,10 +3,16 @@
 [![GitHub release](https://img.shields.io/github/release/markosamuli/ansible-gcloud.svg)](https://github.com/markosamuli/ansible-gcloud/releases)
 [![License](https://img.shields.io/github/license/markosamuli/ansible-gcloud.svg)](https://github.com/markosamuli/ansible-gcloud/blob/master/LICENSE)
 
-| Branch  | Status |
-|---------|--------|
-| master  | [![Build Status](https://travis-ci.org/markosamuli/ansible-gcloud.svg?branch=master)](https://travis-ci.org/markosamuli/ansible-gcloud)
-| develop | [![Build Status](https://travis-ci.org/markosamuli/ansible-gcloud.svg?branch=develop)](https://travis-ci.org/markosamuli/ansible-gcloud)
+| Branch  | Travis Builds | Code Quality |
+|---------|--------|--------------|
+| master  | [![Build Status][travis-master]][travis] | [![Build Status][gh-master]] |
+| develop | [![Build Status][travis-develop]][travis] | [![Build Status][gh-develop]] |
+
+[travis]: https://travis-ci.org/markosamuli/ansible-gcloud
+[travis-master]: https://travis-ci.org/markosamuli/ansible-gcloud.svg?branch=master
+[travis-develop]: https://travis-ci.org/markosamuli/ansible-gcloud.svg?branch=develop
+[gh-master]: https://github.com/markosamuli/ansible-gcloud/workflows/Code%20Quality/badge.svg?branch=master
+[gh-develop]: https://github.com/markosamuli/ansible-gcloud/workflows/Code%20Quality/badge.svg?branch=develop
 
 This Ansible role to install Google Cloud SDK on Ubuntu and macOS development
 machines.

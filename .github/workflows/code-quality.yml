@@ -1,13 +1,13 @@
 ---
 
-name: Test
+name: Code Quality
 
 # This workflow is triggered on pushes to the repository.
 on: [push]  # yamllint disable-line rule:truthy
 
 jobs:
   build:
-    name: Pre-commit
+    name: Lint with pre-commit
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
