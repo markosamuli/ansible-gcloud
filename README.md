@@ -1,5 +1,7 @@
 # Install Google Cloud SDK
 
+[![Ansible Quality Score](https://img.shields.io/ansible/quality/41433.svg)](https://galaxy.ansible.com/markosamuli/gcloud)
+[![Ansible Role](https://img.shields.io/ansible/role/41433.svg)](https://galaxy.ansible.com/markosamuli/gcloud)
 [![GitHub release](https://img.shields.io/github/release/markosamuli/ansible-gcloud.svg)](https://github.com/markosamuli/ansible-gcloud/releases)
 [![License](https://img.shields.io/github/license/markosamuli/ansible-gcloud.svg)](https://github.com/markosamuli/ansible-gcloud/blob/master/LICENSE)
 
@@ -8,7 +10,7 @@
 | master  | [![Build Status][travis-master]][travis] | ![Build Status][gh-master] |
 | develop | [![Build Status][travis-develop]][travis] | ![Build Status][gh-develop] |
 
-[travis]: https://travis-ci.org/markosamuli/ansible-gcloud
+[travis]: https://travis-ci.org/markosamuli/ansible-gcloud/branches
 [travis-master]: https://travis-ci.org/markosamuli/ansible-gcloud.svg?branch=master
 [travis-develop]: https://travis-ci.org/markosamuli/ansible-gcloud.svg?branch=develop
 [gh-master]: https://github.com/markosamuli/ansible-gcloud/workflows/Code%20Quality/badge.svg?branch=master
