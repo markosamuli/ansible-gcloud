@@ -3,7 +3,14 @@
 name: Code Quality
 
 # This workflow is triggered on pushes to the repository.
-on: [push]  # yamllint disable-line rule:truthy
+on:
+  push:
+    branches:
+      - master
+      - develop
+      - 'feature/**'
+    tags:
+      - v2.*
 
 jobs:
   build:
