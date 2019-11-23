@@ -1,3 +1,30 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-{{ gcloud_install_path }}/google-cloud-sdk/install.sh --quiet --usage-reporting {{ gcloud_usage_reporting | lower }} {% if gcloud_profile_path %}--rc-path {{ gcloud_profile_path }} {% endif %} --command-completion {{ gcloud_command_completion | lower }} --path-update {{ gcloud_update_path | lower }} {% if gcloud_override_components | length > 0 %}--override-components {% for component in gcloud_override_components %}{{ component }}{% if loop.index < gcloud_override_components | length  %} {% endif %}{% endfor %} {% endif %}{% if gcloud_additional_components | length > 0 %}--additional-components {% for component in gcloud_additional_components %}{{ component }}{% if loop.index < gcloud_additional_components | length %} {% endif %}{% endfor %}{% endif %}
+_gcloud_is_python_installed() {
+    local binary="$1"
+    if ! command -v "${binary}" 2>/dev/null; then
+        return 1
+    fi
+    local version
+    version=$("${binary}" --version 2>/dev/null)
+    if [ -z "${version}" ]; then
+        return 1
+    fi
+}
+
+{% if gcloud_prefer_python3 | bool %}
+if _gcloud_is_python_installed python3; then
+    export CLOUDSDK_PYTHON=python3
+elif _gcloud_is_python_installed python2; then
+    export CLOUDSDK_PYTHON=python2
+fi
+{% endif %}
+
+{{ gcloud_install_path }}/google-cloud-sdk/install.sh \
+    --quiet \
+    --usage-reporting {{ gcloud_usage_reporting | lower }} \
+    {% if gcloud_profile_path %}--rc-path {{ gcloud_profile_path }} {% endif %} \
+    --command-completion {{ gcloud_command_completion | lower }} \
+    --path-update {{ gcloud_update_path | lower }} \
+    {% if gcloud_override_components | length > 0 %}--override-components {% for component in gcloud_override_components %}{{ component }}{% if loop.index < gcloud_override_components | length %} {% endif %}{% endfor %} {% endif %} \
+    {% if gcloud_additional_components | length > 0 %}--additional-components {% for component in gcloud_additional_components %}{{ component }}{% if loop.index < gcloud_additional_components | length %} {% endif %}{% endfor %}{% endif %}

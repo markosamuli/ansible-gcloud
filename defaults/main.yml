@@ -41,6 +41,9 @@ gcloud_debug: true
 # Cloud SDK version to install
 gcloud_version: "271.0.0"
 
+# Prefer python3 during install
+gcloud_prefer_python3: false
+
 # Setup shell init scripts
 gcloud_setup_shell: true
 

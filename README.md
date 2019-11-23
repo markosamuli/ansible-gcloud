@@ -39,6 +39,17 @@ For backwards compatibility, the role will automatically detect existing
 installation in `~/opt/google-cloud-sdk` and default to this location
 if found.
 
+## Prefer Python 3
+
+The current Google Cloud SDK installer will look for available Python versions
+and prefer `python2` over `python3`.
+
+You can enable `python3` to be preferred over `python2` during install.
+
+```yaml
+gcloud_prefer_python3: true
+```
+
 ## Install using package manager
 
 To install Cloud SDK from the package manager where available, enable it in
