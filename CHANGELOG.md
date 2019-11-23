@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.2] - 2019-11-23
+
+### Changes
+
+* Added `gcloud_prefer_python3` option for preferring `python3` over `python2`
+  during install.
+
 ## [2.1.1] - 2019-11-20
 
 ### Documentation
