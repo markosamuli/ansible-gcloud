@@ -39,7 +39,7 @@ gcloud_additional_components: []
 gcloud_debug: true
 
 # Cloud SDK version to install
-gcloud_version: "271.0.0"
+gcloud_version: "272.0.0"
 
 # Prefer python3 during install
 gcloud_prefer_python3: false
