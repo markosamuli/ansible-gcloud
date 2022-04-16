@@ -5,15 +5,12 @@
 [![GitHub release](https://img.shields.io/github/release/markosamuli/ansible-gcloud.svg)](https://github.com/markosamuli/ansible-gcloud/releases)
 [![License](https://img.shields.io/github/license/markosamuli/ansible-gcloud.svg)](https://github.com/markosamuli/ansible-gcloud/blob/master/LICENSE)
 
-| Branch  | Pipeline                                       |
-| ------- | ---------------------------------------------- |
-| master  | [![master][status-master]][pipeline-master]    |
-| develop | [![develop][status-develop]][pipeline-develop] |
+| Branch | Pipeline                                    |
+| ------ | ------------------------------------------- |
+| master | [![master][status-master]][pipeline-master] |
 
 [pipeline-master]: https://github.com/markosamuli/ansible-gcloud/actions/workflows/pipeline.yml?query=branch%3Amaster
-[pipeline-develop]: https://github.com/markosamuli/ansible-gcloud/actions/workflows/pipeline.yml?query=branch%3Adevelop
 [status-master]: https://github.com/markosamuli/ansible-gcloud/workflows/Test%20and%20release/badge.svg?branch=master
-[status-develop]: https://github.com/markosamuli/ansible-gcloud/workflows/Test%20and%20release/badge.svg?branch=develop
 
 This Ansible role to install Google Cloud SDK on Ubuntu and macOS development
 machines.
