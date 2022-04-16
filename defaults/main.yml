@@ -1,9 +1,8 @@
 ---
-
 # Example: google-cloud-sdk-114.0.0-darwin-x86_64.tar.gz.
 # If present, the archive will be downloaded.
 # See https://cloud.google.com/sdk/ to find the archive name you need.
-gcloud_archive_name: ''
+gcloud_archive_name: ""
 
 # Path where the downloaded archive can be temporarily placed
 gcloud_tmp_path: /tmp/install_gcloud
@@ -14,7 +13,7 @@ gcloud_home: "{{ ansible_env.HOME }}"
 # Installation directory relative to user home directory.
 gcloud_install_dir: "default"
 
- # Enable usage reporting?
+# Enable usage reporting?
 gcloud_usage_reporting: false
 
 # Path to the user profile login script. Optional.
@@ -39,7 +38,7 @@ gcloud_additional_components: []
 gcloud_debug: true
 
 # Cloud SDK version to install
-gcloud_version: "272.0.0"
+gcloud_version: "381.0.0"
 
 # Prefer python3 during install
 gcloud_prefer_python3: false
