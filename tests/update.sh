@@ -5,7 +5,7 @@ PROJECT_ROOT=$(dirname "$TESTS_DIR")
 
 TEST_USER="test"
 REPOSITORY="$(basename "$PROJECT_ROOT")"
-ANSIBLE_VERSION="<2.9.0,!=2.8.6"
+ANSIBLE_VERSION=${ANSIBLE_VERSION:->=2.10}
 
 # Generate Dockerfile from Dockerfile.template
 update_dockerfile() {
@@ -34,12 +34,12 @@ set -euo pipefail
 
 cd "${TESTS_DIR}"
 
-ubuntu_releases=(xenial bionic)
+ubuntu_releases=(focal bionic)
 for tag in "${ubuntu_releases[@]}"; do
     update_dockerfile "ubuntu" "${tag}"
 done
 
-debian_releases=(stretch buster)
+debian_releases=(bullseye buster)
 for tag in "${debian_releases[@]}"; do
     update_dockerfile "debian" "${tag}"
 done
