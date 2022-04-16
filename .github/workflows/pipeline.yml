@@ -1,0 +1,123 @@
+---
+name: Test and release
+
+on:
+  pull_request:
+    branches:
+      - "**"
+  push:
+    branches:
+      - master
+      - develop
+    tags:
+      - v.*
+
+jobs:
+  lint:
+    name: Lint with pre-commit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+      - uses: actions/setup-go@v2
+        with:
+          go-version: "1.18"
+      - name: Install dependencies
+        run: |
+          pip3 install -r requirements.dev.txt
+          go install mvdan.cc/sh/v3/cmd/shfmt@latest
+          sudo apt-get install -y shellcheck
+      - name: Cache pre-commit dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pre-commit/
+          # yamllint disable-line rule:line-length
+          key: ${{ runner.os }}-pre-commit-${{ hashFiles('**/.pre-commit-config.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pre-commit-
+      - name: Run pre-commit
+        run: pre-commit run -a
+
+  syntax:
+    runs-on: ubuntu-latest
+    name: Test syntax
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+      - name: Install dependencies
+        run: |
+          pip3 install -r requirements.dev.txt
+          pip3 install ansible
+      - name: Test syntax
+        run: ./tests/test_syntax.sh
+
+  macos:
+    name: Test - macOS
+    runs-on: macos-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        test_script:
+          - test_install_archive.sh
+          - test_install_archive_in_custom_path.sh
+          - test_install_archive_in_home_opt.sh
+          - test_install_archive_no_shell_init.sh
+          - test_install_archive_with_existing_install.sh
+    steps:
+      - uses: actions/checkout@v3
+      - name: Update Homebrew
+        run: |
+          brew update
+      - name: Install Ansible
+        run: |
+          brew install ansible
+      - name: Setup zsh
+        run: |
+          brew install zsh
+          touch ~/.zshrc
+      - name: Run ${{ matrix.test_script }}
+        run: |
+          ./tests/${{ matrix.test_script }}
+
+  linux:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        release: [bionic, buster, bullseye, focal]
+    name: Test - ${{ matrix.release }}
+    env:
+      RELEASE: ${{ matrix.release }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+      - name: Install dependencies
+        run: pip3 install -r requirements.dev.txt
+      - name: Update test images
+        run: ./tests/update.sh
+      - name: Run tests with ${{ matrix.release }} image
+        run: ./tests/run-tests.sh ${RELEASE}
+
+  release:
+    name: Publish tagged releases to Ansible Galaxy
+    needs:
+      - lint
+      - syntax
+      - macos
+      - linux
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - name: galaxy
+        uses: robertdebock/galaxy-action@1.2.0
+        with:
+          galaxy_api_key: ${{ secrets.galaxy_api_key }}

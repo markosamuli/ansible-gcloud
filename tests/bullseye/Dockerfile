@@ -1,4 +1,4 @@
-FROM ubuntu:bionic
+FROM debian:bullseye
 
 RUN apt-get update && apt-get upgrade -y \
   && apt-get clean \
