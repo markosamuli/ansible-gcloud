@@ -1,6 +1,5 @@
 ---
-
 # Cloud SDK archive name
 gcloud_prefix: "google-cloud-sdk-{{ gcloud_version }}"
-gcloud_os_arch: "darwin-{{ ansible_architecture }}"
+gcloud_os_arch: "darwin-{{ (ansible_architecture == 'arm64') | ternary('arm', ansible_architecture) }}"
 gcloud_archive_name: "{{ gcloud_prefix }}-{{ gcloud_os_arch }}.tar.gz"
